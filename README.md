@@ -56,15 +56,17 @@ pip install requests pillow
 
 ### Mode 1: ISO parsing
 
-1. Move the script and your ISOs to the same folder
+1. Ensure your ISO filenames contain the correct game ID/serial; the [ps2_iso_renamer](https://github.com/lambdan/ps2_iso_renamer) script can help with this
 
-2. Run the script:
+2. Move the script and your ISOs to the same folder
+
+3. Run the script:
 
 ```bash
 python make_icons.py
 ```
 
-3. Select mode 1 when prompted
+4. Select mode 1 when prompted
 
 ### Mode 2: Serials text file
 
