@@ -17,7 +17,7 @@ the PS3 XMB icon system.
 - Preserves the full portrait box art
 - Fits the cover into a PS3-friendly portrait canvas
 - Adds a very subtle drop shadow for depth
-- Outputs a ready-to-use `ICON0.PNG` per game
+- Outputs a ready-to-use `<GAME_ID>.PNG` per game
 
 No image editors are required.
 
@@ -29,11 +29,10 @@ For each serial, the script creates:
 
 ```text
 output/
-└── SLUS-20312/
-    └── ICON0.PNG
+└── SLUS-20312.PNG
 ```
 
-These `ICON0.PNG` files can then be copied into the appropriate PS3 directory depending
+These `<GAME_ID>.PNG` files can then be copied into the appropriate PS3 directory depending
 on how the game is launched.
 
 ---
@@ -101,7 +100,7 @@ This project does not include or redistribute cover art directly.
 ## Notes
 
 - This tool only generates icons. It does not modify PS3 system files.
-- Placement of `ICON0.PNG` depends on your PS3 setup (multiMAN, webMAN, or PKG-based).
+- Placement of `<GAME_ID>.PNG` depends on your PS3 setup (multiMAN, webMAN, or PKG-based).
 - The script is intentionally minimal and easy to modify.
 
 ---
