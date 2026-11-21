@@ -3,3 +3,4 @@ __pycache__/
 output/
 missing.txt
 *.pyc
+*.iso

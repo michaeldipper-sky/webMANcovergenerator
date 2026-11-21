@@ -1,4 +1,6 @@
 import io
+import os
+import re
 from pathlib import Path
 
 import requests
@@ -7,14 +9,16 @@ from PIL import Image, ImageFilter
 # Source: PS2 covers indexed by serial (e.g., SLUS-20312)
 BASE_URL = "https://raw.githubusercontent.com/xlenore/ps2-covers/main/covers/default/{serial}.jpg"
 
+GAME_ID_REGEX = r'[a-zA-Z]{3}[a-zA-Z]?[-]\d{3}\d?\d?'
+
 # Portrait canvas for box art style icons
-TARGET_W = 176
-TARGET_H = 320
+TARGET_W = 268
+TARGET_H = 268
 
 TIMEOUT_SECONDS = 20
 
 
-def load_serials(path: Path) -> list[str]:
+def load_serials_from_txt(path: Path) -> list[str]:
     """Read serials (one per line) from serials.txt. Supports comments with #."""
     serials: list[str] = []
     for line in path.read_text(encoding="utf-8").splitlines():
@@ -22,6 +26,22 @@ def load_serials(path: Path) -> list[str]:
         if not s or s.startswith("#"):
             continue
         serials.append(s)
+    return serials
+
+def load_serials_from_isos(path: Path) -> list[str]:
+    """Parse serials from ISO files in path."""
+    iso_list: list[str] = []
+    for file_name in os.listdir(path):
+        if file_name.endswith((".iso", ".ISO")):
+            iso_list.append(file_name)
+
+    serials: list[str] = []
+    game_id_pattern = re.compile(GAME_ID_REGEX)
+    for iso in iso_list:
+        match = re.search(game_id_pattern, iso)
+        if match is not None:
+            serials.append(match.group())
+
     return serials
 
 
@@ -39,7 +59,7 @@ def fit_full_art(img: Image.Image, target_w: int, target_h: int) -> Image.Image:
     Fit entire cover into a portrait canvas with no crop.
     Any leftover space becomes black padding.
     """
-    canvas = Image.new("RGBA", (target_w, target_h), (0, 0, 0, 255))
+    canvas = Image.new("RGBA", (target_w, target_h), (0, 0, 0, 0))
     art = img.copy().convert("RGBA")
     art.thumbnail((target_w, target_h), Image.LANCZOS)
 
@@ -84,9 +104,7 @@ def make_icon(serial: str, out_dir: Path) -> None:
     if data is None:
         raise FileNotFoundError(serial)
 
-    icon_dir = out_dir / serial
-    icon_dir.mkdir(parents=True, exist_ok=True)
-    icon_path = icon_dir / "ICON0.PNG"
+    icon_path = out_dir / "{0}.PNG".format(serial)
 
     with Image.open(io.BytesIO(data)) as img:
         img = img.convert("RGBA")
@@ -104,12 +122,24 @@ def make_icon(serial: str, out_dir: Path) -> None:
 
 def main() -> None:
     root = Path(__file__).resolve().parent
-    serials_file = root / "serials.txt"
+
+    mode = input("1. Read serials from serials.txt\n2. Parse serials from ISOs\nSelect mode: ").strip()
+
+    if mode not in ["1", "2"]:
+        print("Invalid mode. Exiting...")
+        return
+
     output_dir = root / "output"
     output_dir.mkdir(exist_ok=True)
 
-    serials = load_serials(serials_file)
-    print(f"Found {len(serials)} serials in serials.txt")
+    if mode == "1":
+        serials_file = root / "serials.txt"
+        serials = load_serials_from_txt(serials_file)
+
+    if mode == "2":
+        serials = load_serials_from_isos(root)
+    
+    print(f"Found {len(serials)} serials")
 
     missing: list[str] = []
 
