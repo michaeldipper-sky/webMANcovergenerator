@@ -1,5 +1,6 @@
 venv/
 __pycache__/
+ps2-covers/
 output/
 missing.txt
 *.pyc

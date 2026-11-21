@@ -1,6 +1,6 @@
 # PS2 XMB Cover Generator
 
-This project is a small Python utility that generates PS3-compatible `ICON0.PNG` files
+This project is a small Python utility that generates PS3-compatible `<GAME_ID>.PNG` files
 using official PlayStation 2 box art.
 
 It is designed for use on **CFW PlayStation 3 systems** where PS2 games are launched via
@@ -28,7 +28,7 @@ No image editors are required.
 For each serial, the script creates:
 
 ```text
-output/
+ps2-covers/
 └── SLUS-20312.PNG
 ```
 
@@ -54,6 +54,20 @@ pip install requests pillow
 
 ## Usage
 
+### Mode 1: ISO parsing
+
+1. Move the script and your ISOs to the same folder
+
+2. Run the script:
+
+```bash
+python make_icons.py
+```
+
+3. Select mode 1 when prompted
+
+### Mode 2: Serials text file
+
 1. Create a file named `serials.txt`
 
 2. Add one PS2 serial per line:
@@ -70,7 +84,11 @@ SLPM-65051
 python make_icons.py
 ```
 
-4. Check the `output/` folder for generated icons
+4. Select mode 2 when prompted
+
+### Output
+
+Check the `ps2-covers/` folder for generated icons.
 
 If a serial is missing from the cover repository, it will be logged in `missing.txt`.
 

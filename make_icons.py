@@ -97,7 +97,7 @@ def add_drop_shadow(
 
 
 def make_icon(serial: str, out_dir: Path) -> None:
-    """Create output/<SERIAL>/ICON0.PNG with full-art + subtle shadow."""
+    """Create <OUT_DIR>/<SERIAL>.PNG with full-art + subtle shadow."""
     data = download_cover(serial)
     if data is None:
         raise FileNotFoundError(serial)
@@ -121,20 +121,20 @@ def make_icon(serial: str, out_dir: Path) -> None:
 def main() -> None:
     root = Path(__file__).resolve().parent
 
-    mode = input("1. Read serials from serials.txt\n2. Parse serials from ISOs\nSelect mode: ").strip()
+    mode = input("1. Parse serials from ISOs\n2. Read serials from serials.txt\nSelect mode: ").strip()
 
     if mode not in ["1", "2"]:
         print("Invalid mode. Exiting...")
         return
 
-    output_dir = root / "output"
+    output_dir = root / "ps2-covers"
     output_dir.mkdir(exist_ok=True)
 
     if mode == "1":
+        serials = load_serials_from_isos(root)
+    else:
         serials_file = root / "serials.txt"
         serials = load_serials_from_txt(serials_file)
-    else:
-        serials = load_serials_from_isos(root)
     
     print(f"Found {len(serials)} serials")
 
