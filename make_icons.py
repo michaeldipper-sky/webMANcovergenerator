@@ -34,12 +34,12 @@ def load_serials_from_isos(path: Path) -> list[str]:
     game_id_pattern = re.compile(GAME_ID_REGEX)
 
     serials: list[str] = []
-    for file_name in os.listdir(path):
-        if file_name.endswith((".iso", ".ISO")):
+    for file_path in os.listdir(path):
+        file_name, file_ext = os.path.splitext(file_path)
+        if file_ext in [".iso", ".ISO"]:
             match = re.search(game_id_pattern, file_name)
             if match is not None:
                 serials.append(match.group())
-
     return serials
 
 
@@ -133,8 +133,7 @@ def main() -> None:
     if mode == "1":
         serials_file = root / "serials.txt"
         serials = load_serials_from_txt(serials_file)
-
-    if mode == "2":
+    else:
         serials = load_serials_from_isos(root)
     
     print(f"Found {len(serials)} serials")
