@@ -15,7 +15,7 @@ the PS3 XMB icon system.
 
 - Downloads PS2 cover art by serial number
 - Preserves the full portrait box art
-- Fits the cover into a PS3-friendly portrait canvas
+- Fits the cover into a PS3-friendly square canvas with transparent pillarboxing
 - Adds a very subtle drop shadow for depth
 - Outputs a ready-to-use `<GAME_ID>.PNG` per game
 
