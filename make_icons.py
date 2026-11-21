@@ -28,19 +28,17 @@ def load_serials_from_txt(path: Path) -> list[str]:
         serials.append(s)
     return serials
 
+
 def load_serials_from_isos(path: Path) -> list[str]:
     """Parse serials from ISO files in path."""
-    iso_list: list[str] = []
-    for file_name in os.listdir(path):
-        if file_name.endswith((".iso", ".ISO")):
-            iso_list.append(file_name)
+    game_id_pattern = re.compile(GAME_ID_REGEX)
 
     serials: list[str] = []
-    game_id_pattern = re.compile(GAME_ID_REGEX)
-    for iso in iso_list:
-        match = re.search(game_id_pattern, iso)
-        if match is not None:
-            serials.append(match.group())
+    for file_name in os.listdir(path):
+        if file_name.endswith((".iso", ".ISO")):
+            match = re.search(game_id_pattern, file_name)
+            if match is not None:
+                serials.append(match.group())
 
     return serials
 
