@@ -36,7 +36,7 @@ def load_serials_from_isos(path: Path) -> list[str]:
     serials: list[str] = []
     for file_path in os.listdir(path):
         file_name, file_ext = os.path.splitext(file_path)
-        if file_ext in [".iso", ".ISO"]:
+        if file_ext.lower() == ".iso":
             match = re.search(game_id_pattern, file_name)
             if match is not None:
                 serials.append(match.group())
